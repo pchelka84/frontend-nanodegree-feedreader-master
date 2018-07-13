@@ -70,41 +70,65 @@ $(function() {
         it('is displayed and hides when clicked again', () => {
             const humburgerIcon = document.querySelector('.menu-icon-link');
 
-            // when the menu icon is clicked the menu should be displayed
+            // 1st click on the menu icon, the menu should be displayed
             humburgerIcon.click();
             expect(body).not.toHaveClass('menu-hidden');
 
-            // when the menu icon is clicked 2nd time it the menu should be hidden
+            // 2nd click on the menu ison, the menu should be hidden
             humburgerIcon.click();
             expect(body).toHaveClass('menu-hidden');
-        });
+        })
     });
+
     /* TODO: Write a new test suite named "Initial Entries" */
     describe('Initial Entries', () => {
-         // TODO: Write a test that ensures when the loadFeed
-         // * function is called and completes its work, there is at least
-         // * a single .entry element within the .feed container.
-         // * Remember, loadFeed() is asynchronous so this test will require
-         // * the use of Jasmine's beforeEach and asynchronous done() function.
-         
-        const entry = document.querySelector('.feed').querySelector('.entry');
-        const firstFeedIndex = 1; 
+         /* TODO: Write a test that ensures when the loadFeed
+          * function is called and completes its work, there is at least
+          * a single .entry element within the .feed container.
+          * Remember, loadFeed() is asynchronous so this test will require
+          * the use of Jasmine's beforeEach and asynchronous done() function.
+          */
 
         beforeEach(function(done) {
-            loadFeed(firstFeedIndex, () => {
+            loadFeed(0, () => {
                 done();
             });
         });
 
         it('has at least a single entry element', () => {
-            expect(entry).toBeDefined();
-        });
+            expect(document.querySelector('.feed').querySelector('.entry')).toBeDefined();
+        })
     });
 
     /* TODO: Write a new test suite named "New Feed Selection" */
+    describe('New Feed Selection', () => {
+         /* TODO: Write a test that ensures when a new feed is loaded
+          * by the loadFeed function that the content actually changes.
+          * Remember, loadFeed() is asynchronous.
+          */ 
+        let feed = document.querySelector('.feed');
 
-        /* TODO: Write a test that ensures when a new feed is loaded
-         * by the loadFeed function that the content actually changes.
-         * Remember, loadFeed() is asynchronous.
-         */
+        beforeEach(function(done) {  
+            feed.toBeEmpty();
+
+            // Load 1st feed
+            loadFeed(0, () => {
+                // Store it in a variable
+                firstUrl = feed.find(allFeeds.url);
+                
+                // Load 2nd feed
+                loadFeed(1, () => {
+                    // Store it in another variable
+                    secondUrl = feed.find(allFeeds.url);
+                    done();
+                });
+            });
+
+            // 1st and 2nd URLs must not match
+            it('should be different from the old one', () => {
+                expect(firstUrl).not.toMatch(secondUrl);
+                done();
+            })
+        });
+    });
 }());
