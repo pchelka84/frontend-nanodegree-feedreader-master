@@ -21,7 +21,7 @@ $(function() {
          * allFeeds in app.js to be an empty array and refresh the
          * page?
          */
-        it('are defined', function() {
+        it('are defined', () => {
             expect(allFeeds).toBeDefined();
             expect(allFeeds.length).not.toBe(0);
         });
@@ -30,7 +30,7 @@ $(function() {
          * in the allFeeds object and ensures it has a URL defined
          * and that the URL is not empty.
          */
-        it('has a URL defined and it is not empty', function() {
+        it('has a URL defined and it is not empty', () => {
             allFeeds.forEach(function(feed) {
                 expect(feed.url).toBeDefined();
                 expect(feed.url.length).not.toBe(0);
@@ -41,7 +41,7 @@ $(function() {
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
          */
-        it('has a name defined and it is not empty', function () {
+        it('has a name defined and it is not empty', () => {
             allFeeds.forEach(function(feed) {
                 expect(feed.name).toBeDefined();
                 expect(feed.name.length).not.toBe(0);
@@ -50,15 +50,15 @@ $(function() {
     }); 
 
     /* TODO: Write a new test suite named "The menu" */
-    describe('The menu', function() {
+    describe('The menu', () => {
         body = document.querySelector('body');
-        
+
         /* TODO: Write a test that ensures the menu element is
          * hidden by default. You'll have to analyze the HTML and
          * the CSS to determine how we're performing the
          * hiding/showing of the menu element.
          */
-        it('should be hidden', function() {
+        it('should be hidden', () => {
             expect(body).toHaveClass('menu-hidden');
         })
 
@@ -67,25 +67,39 @@ $(function() {
           * should have two expectations: does the menu display when
           * clicked and does it hide when clicked again.
           */
-        it('is displayed and hides when clicked again', function() {
+        it('is displayed and hides when clicked again', () => {
             const humburgerIcon = document.querySelector('.menu-icon-link');
-            // when the menu icon is clicked triggers the menu to be displayed
+
+            // when the menu icon is clicked the menu should be displayed
             humburgerIcon.click();
             expect(body).not.toHaveClass('menu-hidden');
 
-            // when the menu icon is clicked 2nd time it the menu should hide
+            // when the menu icon is clicked 2nd time it the menu should be hidden
             humburgerIcon.click();
             expect(body).toHaveClass('menu-hidden');
-        })
+        });
     });
     /* TODO: Write a new test suite named "Initial Entries" */
+    describe('Initial Entries', () => {
+         // TODO: Write a test that ensures when the loadFeed
+         // * function is called and completes its work, there is at least
+         // * a single .entry element within the .feed container.
+         // * Remember, loadFeed() is asynchronous so this test will require
+         // * the use of Jasmine's beforeEach and asynchronous done() function.
+         
+        const entry = document.querySelector('.feed').querySelector('.entry');
+        const firstFeedIndex = 1; 
 
-        /* TODO: Write a test that ensures when the loadFeed
-         * function is called and completes its work, there is at least
-         * a single .entry element within the .feed container.
-         * Remember, loadFeed() is asynchronous so this test will require
-         * the use of Jasmine's beforeEach and asynchronous done() function.
-         */
+        beforeEach(function(done) {
+            loadFeed(firstFeedIndex, () => {
+                done();
+            });
+        });
+
+        it('has at least a single entry element', () => {
+            expect(entry).toBeDefined();
+        });
+    });
 
     /* TODO: Write a new test suite named "New Feed Selection" */
 
